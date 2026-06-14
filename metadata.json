@@ -1,0 +1,6 @@
+{
+  "name": "Blog Platform",
+  "description": "A structured boilerplate for a modern blog platform featuring content management, authentication, and layout layers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
