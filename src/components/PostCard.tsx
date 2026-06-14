@@ -1,7 +1,7 @@
 import React from 'react';
 import { Post } from '../types';
 import { useAuth } from '../context/AuthContext';
-import { Calendar, User, Trash2 } from 'lucide-react';
+import { Calendar, User, Trash2, Clock } from 'lucide-react';
 
 interface PostCardProps {
   post: Post;
@@ -23,6 +23,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete }) =>
       year: 'numeric',
     });
   };
+
+  // Estimate Reading Time:
+  // An average reader reads at standard speed of 200 words-per-minute (WPM).
+  // We count the words in the post body and divide by 200, rounding up.
+  const wordCount = post.body.trim().split(/\s+/).filter((w) => w.length > 0).length;
+  const readingTimeMins = Math.max(1, Math.ceil(wordCount / 200));
 
   return (
     <article 
@@ -72,7 +78,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete }) =>
       </div>
 
       {/* Narrative Metadata Footer */}
-      <div className="mx-6 mb-6 flex items-center gap-4 pt-4 border-t border-zinc-100 text-[11px] text-zinc-400 font-mono">
+      <div className="mx-6 mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 pt-4 border-t border-zinc-100 text-[11px] text-zinc-400 font-mono">
         <span className="flex items-center gap-1">
           <User className="w-3.5 h-3.5 text-zinc-400" />
           <span>{post.authorName}</span>
@@ -80,6 +86,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete }) =>
         <span className="flex items-center gap-1">
           <Calendar className="w-3.5 h-3.5 text-zinc-400" />
           <span>{formatDate(post.createdAt)}</span>
+        </span>
+        <span className="flex items-center gap-1" title={`${wordCount} words`}>
+          <Clock className="w-3.5 h-3.5 text-zinc-400" />
+          <span>{readingTimeMins} min read</span>
         </span>
       </div>
     </article>
