@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { postService } from '../api/postService';
+import { useAuth } from '../context/AuthContext';
 import { ChevronLeft, Save, Feather, User, Image, Upload, Link, Trash2, Check, Compass } from 'lucide-react';
 
 interface CreatePostProps {
@@ -35,12 +36,22 @@ const STOCK_ARTWORKS = [
 ];
 
 export const CreatePost: React.FC<CreatePostProps> = ({ setView }) => {
+  const { user } = useAuth();
+  
   // --- REACT STATE HOOKS ---
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [authorName, setAuthorName] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  // Prefill signature name when user sessions resolve
+  useEffect(() => {
+    if (user && !authorName) {
+      setAuthorName(user.name);
+    }
+  }, [user]);
+
 
   // Cover image interactive settings
   const [imageMode, setImageMode] = useState<'stock' | 'upload' | 'url'>('stock');
@@ -109,8 +120,8 @@ export const CreatePost: React.FC<CreatePostProps> = ({ setView }) => {
     setSubmitting(true);
 
     try {
-      const randomAuthorId = `usr_${Math.random().toString(36).substr(2, 6)}`;
-      await postService.create(title, body, randomAuthorId, authorName, imageUrl || undefined);
+      const activeAuthorId = user?.id || `usr_${Math.random().toString(36).substr(2, 6)}`;
+      await postService.create(title, body, activeAuthorId, authorName, imageUrl || undefined);
       setView('home');
     } catch (err: any) {
       setError(err.message || 'An unexpected issue occurred while publishing.');
