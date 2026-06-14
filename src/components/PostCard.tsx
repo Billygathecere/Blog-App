@@ -1,7 +1,7 @@
 import React from 'react';
 import { Post } from '../types';
 import { useAuth } from '../context/AuthContext';
-import { Calendar, User, Trash2, Clock } from 'lucide-react';
+import { Calendar, User, Trash2, Clock, Pencil } from 'lucide-react';
 
 interface PostCardProps {
   post: Post;
@@ -56,18 +56,28 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete }) =>
             
             {/* Conditional Owner Action Section */}
             {isOwner && (
-              <button
-                id={`btn-delete-${post.id}`}
-                onClick={() => {
-                  if (confirm('Are you sure you want to delete this story?')) {
-                    onDelete(post.id);
-                  }
-                }}
-                className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all shrink-0 cursor-pointer"
-                title="Delete Story"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  id={`btn-edit-${post.id}`}
+                  onClick={() => onEdit(post)}
+                  className="p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-all cursor-pointer"
+                  title="Edit Story"
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+                <button
+                  id={`btn-delete-${post.id}`}
+                  onClick={() => {
+                    if (confirm('Are you sure you want to delete this story?')) {
+                      onDelete(post.id);
+                    }
+                  }}
+                  className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all cursor-pointer"
+                  title="Delete Story"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             )}
           </div>
 

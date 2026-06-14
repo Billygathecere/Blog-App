@@ -83,5 +83,33 @@ export const postService = {
         resolve(newPost);
       }, 300);
     });
+  },
+
+  /**
+   * Updates an existing story in localStorage database.
+   */
+  async update(id: string, title: string, body: string, authorName: string, imageUrl?: string): Promise<Post> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const stored = localStorage.getItem('chronicle_posts');
+        const posts: Post[] = stored ? JSON.parse(stored) : DEFAULT_POSTS;
+        const index = posts.findIndex((p) => p.id === id);
+        if (index === -1) {
+          reject(new Error('Post not found in database.'));
+          return;
+        }
+        const updatedPost: Post = {
+          ...posts[index],
+          title,
+          body,
+          authorName,
+          imageUrl,
+          updatedAt: new Date().toISOString(),
+        };
+        posts[index] = updatedPost;
+        localStorage.setItem('chronicle_posts', JSON.stringify(posts));
+        resolve(updatedPost);
+      }, 300);
+    });
   }
 };
