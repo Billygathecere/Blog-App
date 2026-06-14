@@ -3,7 +3,27 @@
  * We will define User, Post, and AuthState schemas here together.
  */
 
-// TODO: Define User interface
-// TODO: Define Post interface
-// TODO: Define AuthState interface
-export {};
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: string;
+}
+
+export interface Post {
+  id: string;
+  title: string;
+  body: string;
+  authorId: string;
+  authorName: string;
+  createdAt: string;
+  updatedAt?: string;
+  imageUrl?: string;
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  isLoading: boolean;
+}
+
